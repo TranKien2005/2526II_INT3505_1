@@ -99,11 +99,9 @@ def upload_avatar(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Định dạng file không hỗ trợ, vui lòng tải lên hình ảnh (400 Bad Request)"
         )
-        
-    # Mô phỏng tính dung lượng file
+
     file_size_bytes = len(avatar.file.read())
     
-    # Lỗi 413: Payload Too Large
     if file_size_bytes > 5 * 1024 * 1024:
         raise HTTPException(
             status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
