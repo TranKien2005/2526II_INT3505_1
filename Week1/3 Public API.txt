@@ -1,0 +1,17 @@
+1, Github Rest API
+- Loại API: RESTful API
+- Đặc điểm kiến trúc: Hệ thổng phân quyền phức tạp với Oath2 và giới hạn lưu lượng (Rate Limiting)
+- Standardized Contract: Tài liệu của GitHub cực kỳ chuẩn mực, định nghĩa rõ ràng lỗi
+(404, 403, 422).
+- Versioning: Cách GitHub quản lý phiên bản API trên URL hoặc Header là một nội dung
+quan trọng trong quản trị dịch vụ (Service Governance).
+2,OpenWeatherMap API
+- Loại API: RESTful API
+- Dữ liệu trả về chủ yếu: Json
+- Statelessness: Mõi request là độc lập chứa đầy đủ API key, tham số ví trí.
+- Granularity: Cung cấp nhiều cấp độ chi tiết từ dự báo theo giờ đến dự báo dài hạn.
+3, PokeAPI
+- Loại API: RESTful API
+- Dữ liệu: Toàn bộ dữ liệu về Pokemon, kỹ năng, hệ, được chuẩn hóa, kết nối với nhau qua các URL
+- Sevice Loose Coupling: Bạn có thể lấy Pokemon mà không cần biết dữ liệu lưu ở database nào phía sau.
+- Caching: Vì dữ liệu ít thay đổi API được tích hợp cơ chế caching để tăng hiệu suất.
