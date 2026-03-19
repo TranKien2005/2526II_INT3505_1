@@ -113,3 +113,8 @@ def upload_avatar(
         "filename": avatar.filename,
         "content_type": avatar.content_type
     }
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+
