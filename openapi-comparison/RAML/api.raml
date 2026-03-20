@@ -1,0 +1,51 @@
+#%RAML 1.0
+title: Library Management API
+version: v1
+baseUri: http://api.example.com
+mediaType:  application/json
+
+types:
+  Book:
+    type: object
+    properties:
+      id: string
+      title: string
+      author: string
+      year: integer
+  BookInput:
+    type: object
+    properties:
+      title: string
+      author: string
+      year: integer
+
+/books:
+  get:
+    description: Lấy danh sách sách
+    responses:
+      200:
+        body:
+          type: Book[]
+  post:
+    description: Thêm sách mới
+    body:
+      type: BookInput
+    responses:
+      201:
+        body:
+          type: Book
+  /{id}:
+    uriParameters:
+      id: string
+    get:
+      description: Lấy thông tin sách
+      responses:
+        200:
+          body:
+            type: Book
+        404:
+          description: Thấy Không Cảm Xúc
+    delete:
+      description: Xóa sách
+      responses:
+        204:

@@ -1,0 +1,62 @@
+FORMAT: 1A
+HOST: http://api.example.com
+
+# Library Management API
+
+API cho ứng dụng quản lý thư viện.
+
+## Books Collection [/books]
+
+### Lấy danh sách sách [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": "1",
+                "title": "Clean Code",
+                "author": "Robert C. Martin",
+                "year": 2008
+            }
+        ]
+
+### Thêm sách mới [POST]
+
++ Request (application/json)
+
+        {
+            "title": "Design Patterns",
+            "author": "Gang of Four",
+            "year": 1994
+        }
+
++ Response 201 (application/json)
+
+        {
+            "id": "2",
+            "title": "Design Patterns",
+            "author": "Gang of Four",
+            "year": 1994
+        }
+
+## Book [/books/{id}]
+
++ Parameters
+    + id: 1 (string, required) - ID của sách
+
+### Lấy thông tin sách [GET]
+
++ Response 200 (application/json)
+
+        {
+            "id": "1",
+            "title": "Clean Code",
+            "author": "Robert C. Martin",
+            "year": 2008
+        }
+
++ Response 404
+
+### Xóa sách [DELETE]
+
++ Response 204
