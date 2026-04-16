@@ -1,0 +1,13 @@
+{
+    "users": [
+        {
+            "username": "admin",
+            "hashed_password": "$2b$12$D7UHiakZsmjZCEZ8HyLw2.EbZ5oCcCKz9ldh91tQADal4/n2UjOp6"
+        },
+        {
+            "username": "kien123456",
+            "hashed_password": "$2b$12$CBH6PZ4jU1bkfqv/jXaKX.JGm8GVHsZfkj9ouX2X19G7Hw59gEtBG"
+        }
+    ],
+    "books": []
+}

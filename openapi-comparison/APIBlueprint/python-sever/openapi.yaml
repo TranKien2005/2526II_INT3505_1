@@ -1,0 +1,171 @@
+openapi: 3.0.1
+info:
+  description: API cho ứng dụng quản lý thư viện.
+  title: Library Management API
+  version: ""
+servers:
+- url: http://api.example.com/
+tags: []
+paths:
+  /books:
+    get:
+      operationId: Lấy danh sách sách
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+              - id: "1"
+                title: Clean Code
+                author: Robert C. Martin
+                year: 2008
+              schema:
+                example:
+                - id: "1"
+                  title: Clean Code
+                  author: Robert C. Martin
+                  year: 2008
+                items:
+                  $ref: "#/components/schemas/L_y_danh_s_ch_s_ch_200_response_inner"
+                type: array
+          description: OK
+      summary: Lấy danh sách sách
+      tags: []
+    post:
+      operationId: Thêm sách mới
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Th_m_s_ch_m_i_request"
+        required: false
+      responses:
+        "201":
+          content:
+            application/json:
+              example:
+                id: "2"
+                title: Design Patterns
+                author: Gang of Four
+                year: 1994
+              schema:
+                $ref: "#/components/schemas/Th_m_s_ch_m_i_201_response"
+          description: Created
+      summary: Thêm sách mới
+      tags: []
+      x-codegen-request-body-name: body
+  /books/{id}:
+    delete:
+      operationId: Xóa sách
+      parameters:
+      - description: ID của sách
+        example: "1"
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: No Content
+      summary: Xóa sách
+      tags: []
+    get:
+      operationId: Lấy thông tin sách
+      parameters:
+      - description: ID của sách
+        example: "1"
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              example:
+                id: "1"
+                title: Clean Code
+                author: Robert C. Martin
+                year: 2008
+              schema:
+                $ref: "#/components/schemas/L_y_th_ng_tin_s_ch_200_response"
+          description: OK
+        "404":
+          content: {}
+          description: Not Found
+      summary: Lấy thông tin sách
+      tags: []
+components:
+  schemas:
+    Books Collection:
+      type: object
+    Book:
+      type: object
+    L_y_danh_s_ch_s_ch_200_response_inner:
+      properties:
+        id:
+          title: id
+          type: string
+        title:
+          title: title
+          type: string
+        author:
+          title: author
+          type: string
+        year:
+          title: year
+          type: number
+      title: L_y_danh_s_ch_s_ch_200_response_inner
+      type: object
+    Th_m_s_ch_m_i_request:
+      example:
+        title: Design Patterns
+        author: Gang of Four
+        year: 1994
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: number
+      title: Th_m_s_ch_m_i_request
+      type: object
+    Th_m_s_ch_m_i_201_response:
+      example:
+        id: "2"
+        title: Design Patterns
+        author: Gang of Four
+        year: 1994
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: number
+      title: Th_m_s_ch_m_i_201_response
+      type: object
+    L_y_th_ng_tin_s_ch_200_response:
+      example:
+        id: "1"
+        title: Clean Code
+        author: Robert C. Martin
+        year: 2008
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        year:
+          type: number
+      title: L_y_th_ng_tin_s_ch_200_response
+      type: object
+x-original-swagger-version: "2.0"

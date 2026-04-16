@@ -1,11 +1,13 @@
 from fastapi import FastAPI, HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime, timedelta, timezone
 import uuid
 import jwt
 import bcrypt
+import json
+import os
 
 # ======================== CONFIG ========================
 SECRET_KEY = "my-super-secret-key-change-in-production"
@@ -14,13 +16,25 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 app = FastAPI(
     title="Book Management API (JWT)",
-    description="API quản lý sách có xác thực JWT. "
-                "Đăng ký tài khoản, đăng nhập lấy token, sau đó dùng token để thao tác CRUD sách.",
-    version="2.0.0",
+    description="""
+API quản lý sách có xác thực JWT. 
+
+### Hướng dẫn sử dụng:
+1. **Lấy Token**: Sử dụng endpoint `/auth/login` (với user **admin** / **password123**) để lấy `access_token`.
+2. **Xác thực**: Nhấn nút **Authorize** màu xanh phía trên.
+3. **Dán Token**: Dán trực tiếp Token bạn vừa lấy vào ô **Value** (không cần gõ thêm chữ 'Bearer').
+4. **Thử nghiệm**: Sau khi nhấn Authorize, các lệnh trong nhóm **Books** sẽ hoạt động.
+
+*Ghi chú: Dữ liệu (User và Book) được lưu bền vững vào file `data_week6.json`.*
+""",
+    version="2.1.0",
 )
 
 # ======================== SECURITY ========================
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+security = HTTPBearer()
+# Note: Keeping the tokenUrl for existing login logic if needed, 
+# but using HTTPBearer for the "Authorize" button in Swagger.
+oauth2_scheme = security 
 
 
 def hash_password(password: str) -> str:
@@ -38,8 +52,9 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_current_user(auth: HTTPAuthorizationCredentials = Depends(security)):
     """Giải mã JWT token và trả về user hiện tại."""
+    token = auth.credentials
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Token không hợp lệ hoặc đã hết hạn.",
@@ -92,9 +107,43 @@ class ErrorResponse(BaseModel):
     message: str
 
 
-# ======================== FAKE DATABASES ========================
+# ======================== PERSISTENCE ========================
+DATA_FILE = os.path.join(os.path.dirname(__file__), "data_week6.json")
 users_db: list[dict] = []      # [{username, hashed_password}]
 fake_database: List[Book] = []
+
+def load_data():
+    global users_db, fake_database
+    if os.path.exists(DATA_FILE):
+        try:
+            with open(DATA_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                users_db = data.get("users", [])
+                # Re-construct Pydantic objects for books
+                fake_database = [Book(**b) for b in data.get("books", [])]
+        except Exception as e:
+            print(f"Error loading data: {e}")
+    
+    # Seed default admin if no users exist
+    if not users_db:
+        users_db.append({
+            "username": "admin",
+            "hashed_password": hash_password("password123"),
+        })
+        save_data()
+
+def save_data():
+    try:
+        with open(DATA_FILE, "w", encoding="utf-8") as f:
+            json.dump({
+                "users": users_db,
+                "books": [b.model_dump() for b in fake_database]
+            }, f, indent=4, ensure_ascii=False)
+    except Exception as e:
+        print(f"Error saving data: {e}")
+
+# Initial load
+load_data()
 
 
 # ======================== AUTH ENDPOINTS ========================
@@ -116,6 +165,7 @@ def register(user_in: UserRegister):
         "username": user_in.username,
         "hashed_password": hash_password(user_in.password),
     })
+    save_data()
     return {"message": f"Đăng ký thành công cho user '{user_in.username}'."}
 
 
@@ -136,6 +186,17 @@ def login(form_data: OAuth2PasswordRequestForm = Depends()):
         )
     token = create_access_token(data={"sub": user["username"]})
     return TokenResponse(access_token=token)
+
+
+# ======================== PROTECTED ME ENDPOINT ========================
+@app.get(
+    "/auth/me",
+    summary="Kiểm tra thông tin user hiện tại",
+    tags=["Auth"],
+)
+def get_me(current_user: dict = Depends(get_current_user)):
+    """Trả về thông tin của user gắn với token hiện tại."""
+    return {"username": current_user["username"], "status": "authorized"}
 
 
 # ======================== BOOK ENDPOINTS (PROTECTED) ========================
@@ -167,6 +228,7 @@ def create_new_book(book_in: BookInput, current_user: dict = Depends(get_current
         isbn=book_in.isbn,
     )
     fake_database.append(new_book)
+    save_data()
     return new_book
 
 
@@ -202,6 +264,7 @@ def update_book(bookId: str, book_in: BookInput, current_user: dict = Depends(ge
                 isbn=book_in.isbn,
             )
             fake_database[i] = updated_book
+            save_data()
             return updated_book
     raise HTTPException(status_code=404, detail="Không tìm thấy sách để cập nhật.")
 
@@ -217,6 +280,7 @@ def delete_book(bookId: str, current_user: dict = Depends(get_current_user)):
     for i, b in enumerate(fake_database):
         if b.id == bookId:
             fake_database.pop(i)
+            save_data()
             return None
     raise HTTPException(status_code=404, detail="Không tìm thấy sách để xóa.")
 

@@ -1,0 +1,240 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Library Management API",
+        "version": "",
+        "description": "API cho ứng dụng quản lý thư viện."
+    },
+    "host": "api.example.com",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/books": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "examples": {
+                            "application/json": [
+                                {
+                                    "id": "1",
+                                    "title": "Clean Code",
+                                    "author": "Robert C. Martin",
+                                    "year": 2008
+                                }
+                            ]
+                        },
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "author": {
+                                        "type": "string"
+                                    },
+                                    "year": {
+                                        "type": "number"
+                                    }
+                                }
+                            },
+                            "example": [
+                                {
+                                    "id": "1",
+                                    "title": "Clean Code",
+                                    "author": "Robert C. Martin",
+                                    "year": 2008
+                                }
+                            ]
+                        }
+                    }
+                },
+                "summary": "Lấy danh sách sách",
+                "operationId": "Lấy danh sách sách",
+                "description": "",
+                "tags": [],
+                "parameters": [],
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": []
+            },
+            "post": {
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "headers": {},
+                        "examples": {
+                            "application/json": {
+                                "id": "2",
+                                "title": "Design Patterns",
+                                "author": "Gang of Four",
+                                "year": 1994
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "year": {
+                                    "type": "number"
+                                }
+                            },
+                            "example": {
+                                "id": "2",
+                                "title": "Design Patterns",
+                                "author": "Gang of Four",
+                                "year": 1994
+                            }
+                        }
+                    }
+                },
+                "summary": "Thêm sách mới",
+                "operationId": "Thêm sách mới",
+                "description": "",
+                "tags": [],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "title": {
+                                    "type": "string"
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "year": {
+                                    "type": "number"
+                                }
+                            },
+                            "example": {
+                                "title": "Design Patterns",
+                                "author": "Gang of Four",
+                                "year": 1994
+                            }
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": [
+                    "application/json"
+                ]
+            }
+        },
+        "/books/{id}": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "headers": {},
+                        "examples": {
+                            "application/json": {
+                                "id": "1",
+                                "title": "Clean Code",
+                                "author": "Robert C. Martin",
+                                "year": 2008
+                            }
+                        },
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "year": {
+                                    "type": "number"
+                                }
+                            },
+                            "example": {
+                                "id": "1",
+                                "title": "Clean Code",
+                                "author": "Robert C. Martin",
+                                "year": 2008
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "headers": {},
+                        "examples": {}
+                    }
+                },
+                "summary": "Lấy thông tin sách",
+                "operationId": "Lấy thông tin sách",
+                "description": "",
+                "tags": [],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID của sách",
+                        "required": true,
+                        "x-example": "1",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "consumes": []
+            },
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "headers": {},
+                        "examples": {}
+                    }
+                },
+                "summary": "Xóa sách",
+                "operationId": "Xóa sách",
+                "description": "",
+                "tags": [],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID của sách",
+                        "required": true,
+                        "x-example": "1",
+                        "type": "string"
+                    }
+                ],
+                "consumes": []
+            }
+        }
+    },
+    "definitions": {
+        "Books Collection": {},
+        "Book": {}
+    },
+    "securityDefinitions": {},
+    "tags": []
+}

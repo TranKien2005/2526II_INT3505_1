@@ -1,0 +1,234 @@
+openapi: 3.0.0
+info:
+  title: Product and Store Management API
+  description: A simple API for managing products and stores with basic CRUD operations.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+
+paths:
+  /products:
+    get:
+      summary: List all products
+      tags:
+        - Products
+      responses:
+        '200':
+          description: A list of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: Create a new product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201':
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /products/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get product details
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+    put:
+      summary: Update a product
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: Product updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+    delete:
+      summary: Delete a product
+      tags:
+        - Products
+      responses:
+        '204':
+          description: Product deleted
+        '404':
+          description: Product not found
+
+  /stores:
+    get:
+      summary: List all stores
+      tags:
+        - Stores
+      responses:
+        '200':
+          description: A list of stores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Store'
+    post:
+      summary: Create a new store
+      tags:
+        - Stores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInput'
+      responses:
+        '201':
+          description: Store created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+
+  /stores/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get store details
+      tags:
+        - Stores
+      responses:
+        '200':
+          description: Store details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Store not found
+    put:
+      summary: Update a store
+      tags:
+        - Stores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInput'
+      responses:
+        '200':
+          description: Store updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Store'
+        '404':
+          description: Store not found
+    delete:
+      summary: Delete a store
+      tags:
+        - Stores
+      responses:
+        '204':
+          description: Store deleted
+        '404':
+          description: Store not found
+
+components:
+  schemas:
+    ProductInput:
+      type: object
+      required:
+        - name
+        - price
+      properties:
+        name:
+          type: string
+          example: Apple iPhone 15
+        description:
+          type: string
+          example: Latest model with A16 Bionic chip.
+        price:
+          type: number
+          format: float
+          example: 999.99
+        quantity:
+          type: integer
+          example: 50
+        category:
+          type: string
+          example: Electronics
+
+    Product:
+      allOf:
+        - $ref: '#/components/schemas/ProductInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 123e4567-e89b-12d3-a456-426614174000
+
+    StoreInput:
+      type: object
+      required:
+        - name
+        - location
+      properties:
+        name:
+          type: string
+          example: Downtown Electronics
+        location:
+          type: string
+          example: 123 Main St, New York, NY
+        phone:
+          type: string
+          example: "+1-202-555-0173"
+
+    Store:
+      allOf:
+        - $ref: '#/components/schemas/StoreInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: 987f6543-a21b-34c5-d678-098765432100

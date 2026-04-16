@@ -2,7 +2,7 @@ import "@typespec/http";
 
 using TypeSpec.Http;
 
-@service({
+@service(#{
   title: "Library Management API",
 })
 namespace LibraryApi;

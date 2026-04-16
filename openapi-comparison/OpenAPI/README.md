@@ -35,3 +35,26 @@ pip install schemathesis
 # Chạy test vào một API đang host ở localhost:8000
 schemathesis run openapi.yaml --base-url http://localhost:8000
 ```
+
+npm install @openapitools/openapi-generator-cli
+
+npx openapi-generator-cli generate \
+  -i openapi.yaml \
+  -g python-fastapi \
+  -o ./server
+
+  A. Client (frontend / gọi API)
+Generator	Dùng cho
+typescript-axios	React, Vue, Angular
+typescript-fetch	Web thuần
+javascript	JS cơ bản
+java	Java client
+python	Python client
+
+B. Server (backend)
+Generator	Framework
+nodejs-express-server	Node.js (Express)
+python-fastapi	FastAPI
+spring	Spring Boot (Java)
+go-server	Golang
+aspnetcore	.NET
