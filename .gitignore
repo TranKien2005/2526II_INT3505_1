@@ -1,11 +1,15 @@
 # Environments
 .env
 .venv
+.vevn/
 env/
 venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Local tools
+Week8/tools/
 
 # Python
 __pycache__/
