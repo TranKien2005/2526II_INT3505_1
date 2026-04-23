@@ -18,7 +18,7 @@ from setuptools import setup, find_packages  # noqa: H301
 #
 # prerequisite: setuptools
 # http://pypi.python.org/pypi/setuptools
-NAME = "openapi-client"
+NAME = "openapi-server"
 VERSION = "1.0.0"
 PYTHON_REQUIRES = ">= 3.9"
 REQUIRES = [
@@ -26,6 +26,7 @@ REQUIRES = [
     "python-dateutil >= 2.8.2",
     "pydantic >= 2.11",
     "typing-extensions >= 4.7.1",
+    "fastapi[all]",
 ]
 
 setup(
@@ -37,11 +38,12 @@ setup(
     url="",
     keywords=["OpenAPI", "OpenAPI-Generator", "Product and Store Management API"],
     install_requires=REQUIRES,
-    packages=find_packages(exclude=["test", "tests"]),
+    package_dir={'': 'src'},
+    packages=find_packages(where='src', exclude=["test", "tests"]),
     include_package_data=True,
     long_description_content_type='text/markdown',
     long_description="""\
     A simple API for managing products and stores with basic CRUD operations.
     """,  # noqa: E501
-    package_data={"openapi_client": ["py.typed"]},
+    package_data={"openapi_server": ["py.typed"]},
 )

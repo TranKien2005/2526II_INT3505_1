@@ -16,12 +16,21 @@ from fastapi import FastAPI
 
 from openapi_server.apis.products_api import router as ProductsApiRouter
 from openapi_server.apis.stores_api import router as StoresApiRouter
+from openapi_server.db import connect_to_mongo, close_mongo_connection
 
 app = FastAPI(
     title="Product and Store Management API",
     description="A simple API for managing products and stores with basic CRUD operations.",
     version="1.0.0",
 )
+
+@app.on_event("startup")
+async def startup_db_client():
+    await connect_to_mongo()
+
+@app.on_event("shutdown")
+async def shutdown_db_client():
+    await close_mongo_connection()
 
 app.include_router(ProductsApiRouter)
 app.include_router(StoresApiRouter)
