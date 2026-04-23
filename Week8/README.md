@@ -51,7 +51,19 @@ python -c "import zipfile; zipfile.ZipFile('Week8/tools/k6/k6.zip').extractall('
 & 'D:\My Works\Coding\Practice\2526II_INT3505_1\Week8\tools\k6\k6-v0.51.0-windows-amd64\k6.exe' run -e BASE_URL=http://127.0.0.1:8000 'D:\My Works\Coding\Practice\2526II_INT3505_1\Week8\tests\performance\k6_library.js'
 ```
 
-## 4) Dọn môi trường
+## 4) API integration test bằng Newman (Postman CLI)
+
+### Cài Newman local ở root project (1 lần)
+```bash
+npm install --save-dev newman
+```
+
+### Chạy collection Week8 bằng npx
+```bash
+npx newman run Week8/Week8-Library.postman_collection.json
+```
+
+## 5) Dọn môi trường
 
 ### Dừng MySQL container
 ```bash

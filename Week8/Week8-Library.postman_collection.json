@@ -1,0 +1,179 @@
+{
+  "info": {
+    "name": "Week8 Library API",
+    "description": "Postman collection for Week8 FastAPI library management (borrow/return).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "book_id",
+      "value": ""
+    },
+    {
+      "key": "borrow_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Health - GET /",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Book - POST /books",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Clean Architecture\",\n  \"author\": \"Robert C. Martin\",\n  \"total_quantity\": 2\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "const bookData = pm.response.json();",
+              "if (bookData && bookData.id) {",
+              "    pm.collectionVariables.set('book_id', bookData.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "List Books - GET /books",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/books",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "books"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Borrow Book - POST /borrows",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"book_id\": {{book_id}},\n  \"borrower_name\": \"Kien\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/borrows",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "borrows"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "const borrowData = pm.response.json();",
+              "if (borrowData && borrowData.id) {",
+              "    pm.collectionVariables.set('borrow_id', borrowData.id);",
+              "}"
+            ]
+          }
+        }
+      ],
+      "response": []
+    },
+    {
+      "name": "Return Book - POST /borrows/{id}/return",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/borrows/{{borrow_id}}/return",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "borrows",
+            "{{borrow_id}}",
+            "return"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Borrows - GET /borrows",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/borrows",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "borrows"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
